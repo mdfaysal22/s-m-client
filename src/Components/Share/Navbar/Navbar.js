@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AiFillHome } from 'react-icons/ai';
 import { FaUserAlt, FaUserFriends } from 'react-icons/fa';
 import { RiUserFollowFill } from 'react-icons/ri';
+import { GiThreeFriends } from 'react-icons/gi';
 
 const Navbar = () => {
     const [state, setState] = useState(false);
@@ -11,6 +12,7 @@ const Navbar = () => {
         { title: 'Feed', icon: <AiFillHome></AiFillHome>, path: '/' },
         { title: 'Followers', icon: <FaUserFriends></FaUserFriends>, path: '/followers' },
         { title: 'Followings', icon: <RiUserFollowFill></RiUserFollowFill>, path: '/followings' },
+        { title: 'Peoples', icon: <GiThreeFriends></GiThreeFriends>, path: '/users' },
         { title: 'Profile', icon: <FaUserAlt></FaUserAlt>, path: '/profile' }
     ]
     return (

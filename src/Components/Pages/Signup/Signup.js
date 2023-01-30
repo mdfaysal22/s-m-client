@@ -1,7 +1,73 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
+import { userAuth } from '../../Contexts/AuthContext';
 
 const Signup = () => {
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { emailSignup, setLoader, updateUser } = useContext(userAuth);
+    const navigate = useNavigate();
+
+    const onSubmit = (data, event) => {
+        const form = event.target;
+        const name = data.name;
+        const email = data.email;
+        const pass = data.password;
+        const img = data.image[0];
+        const formData = new FormData();
+        formData.append('image', img);
+        const url = `https://api.imgbb.com/1/upload?key=0e3d79f4b095e0bbb5b9be5814435ed1`;
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(result => {
+            const imgURL = result.data.url;
+            if(result.success){
+                emailSignup(email, pass)
+                .then(result => {
+                    const success = result.user;
+    
+                    updateUser(name, imgURL)
+                        .then(result => {
+                            
+                            setLoader(true)
+                            const newUser = {
+                                name,
+                                imgURL, 
+                                email
+                            }
+                            fetch('http://localhost:5000/users', {
+                                method: "POST",
+                                headers:{
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(newUser)
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log(data);
+                                toast.success("SignUp Successfully");
+                                navigate('/')
+                                setLoader(false)
+                            });
+                            
+                        })
+                        .catch(err => () => {
+                            const errorMassage = err.massage;
+                        })
+    
+                })
+                .catch(err => console.log(err));
+            }
+            
+            
+        })
+        
+        form.reset();
+    };
     return (
         <div className='hero min-h-screen'>
             <div className='hero-content'>
@@ -12,11 +78,11 @@ const Signup = () => {
                     </div>
                     <div className='text-center bg-gray-100 p-5 rounded-md'>
                         <h1 className='text-3xl font-light'>Sign-Up Now</h1>
-                        <form className='mt-3 flex flex-col justify-center items-center gap-3'>
-                            <input type="text" placeholder="Type Your Full Name" className="input w-full border border-primary focus:ring-0 " />
-                            <input type="text" placeholder="Type Your Email" className="input w-full border border-primary focus:ring-0 " />
+                        <form onSubmit={handleSubmit(onSubmit)} className='mt-3 flex flex-col justify-center items-center gap-3'>
+                            <input {...register("name")} type="text" placeholder="Type Your Full Name" className="input w-full border border-primary focus:ring-0 " />
+                            <input {...register("email", { required: true })} type="text" placeholder="Type Your Email" className="input w-full border border-primary focus:ring-0 " />
 
-                            <input type="password" placeholder="Type Your Password" className="input w-full border border-primary focus:ring-0 " />
+                            <input {...register("password")} type="password" placeholder="Type Your Password" className="input w-full border border-primary focus:ring-0 " />
 
                             <div className="form-control w-full">
                                 
@@ -58,7 +124,7 @@ const Signup = () => {
                                             <span className="text-blue-400 underline ml-1">browse</span>
                                         </span>
                                     </span>
-                                    <input id="photo-dropbox" type="file" className="sr-only w-full" />
+                                    <input {...register("image")} id="photo-dropbox" type="file" className="sr-only w-full" />
                                 </label>
                             </div>
                             <Link className='hover:text-secondary duration-100 text-xs' to={'/login'}>Already Have an Account in Join-in.</Link>

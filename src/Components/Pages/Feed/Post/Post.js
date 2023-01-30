@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { FaRegShareSquare } from "react-icons/fa";
 
-const Post = () => {
+const Post = ({ posts }) => {
+    const [postText, setPostText] = useState(posts?.post.slice(0, 300));
+    
   return (
     <div className="my-5 bg-gray-100 border border-gray-200 rounded-md">
       <div className="p-3 flex flex-col gap-5">
@@ -11,12 +13,14 @@ const Post = () => {
           <div className="flex justify-start items-start gap-3">
             <div className="avatar placeholder">
               <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
-                <span className="text-3xl">K</span>
+                <img src={posts?.photo} alt="" />
               </div>
             </div>
             <div>
-            <h1>User Name <span className="text-xs text-gray-400">20:28</span></h1>
-            <small>Title of User...</small>
+              <h1>
+                {posts?.name}
+                <span className="text-xs text-gray-400 ml-2">20:28</span>
+              </h1>
             </div>
           </div>
           <div>
@@ -24,23 +28,21 @@ const Post = () => {
           </div>
         </div>
         <div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat,
-            obcaecati nihil. Laborum velit ducimus dignissimos quod incidunt
-            impedit? Veniam temporibus aut enim ipsam perspiciatis nemo soluta
-            laudantium provident qui sapiente recusandae modi voluptates
-            repellendus ipsum eligendi atque maiores, at culpa ad ex aliquam
-            facilis optio et. Adipisci accusantium qui id!{" "}
-            <button className="text-xs hover:text-secondary">
-              ... See More
-            </button>{" "}
-          </p>
-
-          <img
+          <div>
+          
+          
+            <span>{postText}</span>
+            
+          </div>
+          <div>
+          {
+            posts?.imgURL && <img
             className="w-full mt-3 rounded-md"
-            src="https://images.herzindagi.info/image/2021/Dec/nature-quotes-main.jpg"
+            src={posts?.imgURL}
             alt="Images Of Natural Beauty"
           />
+          }
+          </div>
         </div>
         <div className="flex justify-start items-center gap-3">
           <small>100k Like</small>

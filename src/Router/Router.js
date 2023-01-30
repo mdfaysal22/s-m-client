@@ -3,10 +3,12 @@ import Feed from "../Components/Pages/Feed/Feed";
 import Followers from "../Components/Pages/Followers/Followers";
 import Followings from "../Components/Pages/Followings/Followings";
 import Login from "../Components/Pages/Login/Login";
+import Peoples from "../Components/Pages/Peoples/Peoples";
 import Profile from "../Components/Pages/Profile/Profile";
 import Signup from "../Components/Pages/Signup/Signup";
 import Welcome from "../Components/Pages/Welcome/Welcome";
 import Main from "../Layout/Main";
+import PrivateRouter from "../PrivateRouter/PrivateRouter";
 
 
 export const router = createBrowserRouter([
@@ -16,19 +18,23 @@ export const router = createBrowserRouter([
         children: [
             {
                 path:'/',
-                element:<Feed></Feed>
+                element:<PrivateRouter><Feed></Feed></PrivateRouter>
             },
             {
                 path: '/followers',
-                element: <Followers></Followers>
+                element: <PrivateRouter><Followers></Followers></PrivateRouter>
             },
             {
                 path: '/followings',
-                element: <Followings></Followings>
+                element: <PrivateRouter><Followings></Followings></PrivateRouter>
             },
             {
                 path: '/profile',
-                element: <Profile></Profile>
+                element: <PrivateRouter><Profile></Profile></PrivateRouter>
+            },
+            {
+                path: '/users',
+                element: <Peoples></Peoples>
             }
         ]
     },
